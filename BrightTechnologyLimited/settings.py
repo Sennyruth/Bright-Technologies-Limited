@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'BrightTechnologyLimited.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Bright_db',
+        'NAME': 'CRMOrderForm',
         'USER': 'postgres',
         'PASSWORD': '1974',
         'HOST': 'localhost',       # Or your DB host

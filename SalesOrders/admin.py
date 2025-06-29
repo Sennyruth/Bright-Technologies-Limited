@@ -1,34 +1,49 @@
 from django.contrib import admin
 from django.urls import path
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from io import BytesIO
+import openpyxl
+import csv
+
 from .models import SalesOrder, SalesOrderLines
 from .forms import SalesOrderImportForm
-import openpyxl
 
-# Customize Admin Panel Titles
 admin.site.site_header = "Bright Technology Limited Admin Panel"
 admin.site.site_title = "Bright Technology Admin"
 admin.site.index_title = "Welcome to Bright Technology Admin"
 
-
-# Inline admin to show SalesOrderLines within SalesOrder
 class SalesOrderLinesInline(admin.TabularInline):
     model = SalesOrderLines
     extra = 1
 
-
-# Admin class for SalesOrder
 @admin.register(SalesOrder)
 class SalesOrderAdmin(admin.ModelAdmin):
-    list_display = ("order_reference", "customer", "status", "creation_date", "total")
+    list_display = ("order_reference", "customer", "salesperson", "status", "creation_date", "currency", "total")
     change_list_template = "admin/salesorder_changelist.html"
-    inlines = [SalesOrderLinesInline]  # Attach SalesOrderLines inline
-    search_fields = ["order_reference", "customer"]  # For autocomplete
+    inlines = [SalesOrderLinesInline]
+    search_fields = ["order_reference", "customer"]
 
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
-            path("import-orders/", self.admin_site.admin_view(self.import_orders), name="import_orders")
+            path(
+                "import-orders/",
+                self.admin_site.admin_view(self.import_orders),
+                name="SalesOrders_salesorder_import_orders",
+            ),
+            path(
+                "export-orders/",
+                self.admin_site.admin_view(self.export_orders),
+                name="SalesOrders_salesorder_export_orders",
+            ),
+            path(
+                "<path:object_id>/print-pdf/",
+                self.admin_site.admin_view(self.print_pdf_view),
+                name="SalesOrders_salesorder_print_pdf",
+            ),
         ]
         return custom_urls + urls
 
@@ -75,10 +90,48 @@ class SalesOrderAdmin(admin.ModelAdmin):
 
         return render(request, "admin/salesorder_import.html", {"form": form})
 
+    def export_orders(self, request):
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="sales_orders.csv"'
 
-# Admin for managing SalesOrderLines separately with autocomplete
-@admin.register(SalesOrderLines)
+        writer = csv.writer(response)
+        writer.writerow([
+            'Creation Date', 'Customer', 'Currency', 'Order Reference', 'Salesperson',
+            'Status', 'Total', 'Primary Contact', 'Finance Contact', 'Delivery Address',
+            'Invoice Address', 'Email Address', 'Delivery Date', 'Delivery Office Location',
+            'Tell No', 'Designation', 'Department', 'LPO Confirmation Date', 'LPO Date',
+            'LPO Number', 'Comments'
+        ])
+
+        for order in SalesOrder.objects.all():
+            writer.writerow([
+                order.creation_date, order.customer, order.currency, order.order_reference,
+                order.salesperson, order.status, order.total, order.primary_contact,
+                order.finance_contact, order.delivery_address, order.invoice_address,
+                order.email_address, order.delivery_date, order.delivery_office_location,
+                order.tell_no, order.designation, order.department, order.lpo_confirmation_date,
+                order.lpo_date, order.lpo_number, order.comments
+            ])
+
+        return response
+
+    def print_pdf_view(self, request, object_id):
+        print(f"Looking for SalesOrder with order_reference = {object_id}")
+        order = get_object_or_404(SalesOrder, pk=object_id)
+        order_lines = order.order_lines.all()
+
+        template = get_template("admin/salesorder_pdf.html")
+        html = template.render({"order": order, "order_lines": order_lines})
+
+        response = HttpResponse(content_type="application/pdf")
+        response["Content-Disposition"] = f'attachment; filename="SalesOrder_{order.order_reference}.pdf"'
+
+        pisa.CreatePDF(BytesIO(html.encode("UTF-8")), dest=response)
+        return response
+
+# ✅ Autocomplete and search for order_reference when adding SalesOrderLines
 class SalesOrderLinesAdmin(admin.ModelAdmin):
-    autocomplete_fields = ['order_reference']
-    list_display = ['order_reference', 'product', 'quantity', 'unit_price', 'cost', 'margin', 'margin_percentage']
-    search_fields = ['product']
+    autocomplete_fields = ["order_reference"]
+    search_fields = ["order_reference__order_reference", "order_reference__customer"]
+
+admin.site.register(SalesOrderLines, SalesOrderLinesAdmin)

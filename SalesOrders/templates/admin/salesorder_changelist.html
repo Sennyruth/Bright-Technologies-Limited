@@ -1,5 +1,15 @@
-{% extends "admin/change_list.html" %} {% block object-tools-items %}
-<li>
-  <a href="{% url 'admin:import_orders' %}" class="addlink">Import Orders</a>
-</li>
-{{ block.super }} {% endblock %}
+{% extends "admin/change_list.html" %}
+
+{% block object-tools-items %}
+  {{ block.super }}
+  <li>
+    <a href="{% url 'admin:SalesOrders_salesorder_import_orders' %}" class="addlink">
+      📥 Import Orders
+    </a>
+  </li>
+  <li>
+    <a href="{% url 'admin:SalesOrders_salesorder_export_orders' %}" class="addlink">
+      📤 Export Orders
+    </a>
+  </li>
+{% endblock %}
