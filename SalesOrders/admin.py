@@ -1,20 +1,29 @@
 from django.contrib import admin
 from django.urls import path
 from django.shortcuts import render, redirect
-from .models import SalesOrder
+from .models import SalesOrder, SalesOrderLines
 from .forms import SalesOrderImportForm
 import openpyxl
-from django.contrib import admin
 
+# Customize Admin Panel Titles
 admin.site.site_header = "Bright Technology Limited Admin Panel"
 admin.site.site_title = "Bright Technology Admin"
 admin.site.index_title = "Welcome to Bright Technology Admin"
 
 
+# Inline admin to show SalesOrderLines within SalesOrder
+class SalesOrderLinesInline(admin.TabularInline):
+    model = SalesOrderLines
+    extra = 1
+
+
+# Admin class for SalesOrder
 @admin.register(SalesOrder)
 class SalesOrderAdmin(admin.ModelAdmin):
     list_display = ("order_reference", "customer", "status", "creation_date", "total")
     change_list_template = "admin/salesorder_changelist.html"
+    inlines = [SalesOrderLinesInline]  # Attach SalesOrderLines inline
+    search_fields = ["order_reference", "customer"]  # For autocomplete
 
     def get_urls(self):
         urls = super().get_urls()
@@ -65,6 +74,11 @@ class SalesOrderAdmin(admin.ModelAdmin):
             form = SalesOrderImportForm()
 
         return render(request, "admin/salesorder_import.html", {"form": form})
-    
 
 
+# Admin for managing SalesOrderLines separately with autocomplete
+@admin.register(SalesOrderLines)
+class SalesOrderLinesAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['order_reference']
+    list_display = ['order_reference', 'product', 'quantity', 'unit_price', 'cost', 'margin', 'margin_percentage']
+    search_fields = ['product']
