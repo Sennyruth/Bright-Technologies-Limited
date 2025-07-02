@@ -80,7 +80,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'CRMOrderForm',
         'USER': 'postgres',
-        'PASSWORD': '1974',
+        'PASSWORD': '00000000',
         'HOST': 'localhost',       # Or your DB host
         'PORT': '5432',            # Default PostgreSQL port
     }
