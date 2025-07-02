@@ -1,0 +1,32 @@
+/* Purple branding */
+#header, .module caption {
+  background: #6a1b9a;
+  color: white;
+}
+
+/* Button styling */
+a.addlink, a.button {
+  background-color: #6a1b9a;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  margin-left: 8px;
+  text-decoration: none;
+}
+
+a.addlink:hover, a.button:hover {
+  background-color: #4a148c;
+}
+
+.module th {
+  background: #eee;
+}
+
+#content-main .module table {
+  font-size: 14px;
+}
+
+#nav-sidebar {
+  display: none !important;
+}
+

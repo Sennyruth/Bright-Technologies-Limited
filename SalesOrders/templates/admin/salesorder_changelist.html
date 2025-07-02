@@ -1,15 +1,13 @@
 {% extends "admin/change_list.html" %}
+{% load static %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'admin/css/bright_admin.css' %}">
+{% endblock %}
 
 {% block object-tools-items %}
   {{ block.super }}
-  <li>
-    <a href="{% url 'admin:SalesOrders_salesorder_import_orders' %}" class="addlink">
-      📥 Import Orders
-    </a>
-  </li>
-  <li>
-    <a href="{% url 'admin:SalesOrders_salesorder_export_orders' %}" class="addlink">
-      📤 Export Orders
-    </a>
-  </li>
+  <li><a href="{% url 'admin:SalesOrders_salesorder_import_orders' %}" class="addlink">IMPORT</a></li>
+  <li><a href="{% url 'admin:SalesOrders_salesorder_export_orders' %}" class="addlink">EXPORT</a></li>
 {% endblock %}

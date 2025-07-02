@@ -11,6 +11,8 @@ import csv
 from .models import SalesOrder, SalesOrderLines
 from .forms import SalesOrderImportForm
 
+from django.utils.html import format_html
+
 admin.site.site_header = "Bright Technology Limited Admin Panel"
 admin.site.site_title = "Bright Technology Admin"
 admin.site.index_title = "Welcome to Bright Technology Admin"
@@ -24,7 +26,7 @@ class SalesOrderAdmin(admin.ModelAdmin):
     list_display = ("order_reference", "customer", "salesperson", "status", "creation_date", "currency", "total")
     change_list_template = "admin/salesorder_changelist.html"
     inlines = [SalesOrderLinesInline]
-    search_fields = ["order_reference", "customer"]
+    search_fields = ["order_reference", "customer", "salesperson", "status", "creation_date", "currency", "total"]
 
     def get_urls(self):
         urls = super().get_urls()
@@ -128,6 +130,27 @@ class SalesOrderAdmin(admin.ModelAdmin):
 
         pisa.CreatePDF(BytesIO(html.encode("UTF-8")), dest=response)
         return response
+    
+    from django.utils.html import format_html
+
+    
+    def status_badge(self, obj):
+        color = {
+            "Quotation": "gray",
+            "Sales Order": "purple",
+            "Confirmed": "green",
+            "Cancelled": "red",
+        }.get(obj.status, "black")
+
+        return format_html(
+            '<span style="padding:3px 8px; background-color:{}; color:white; border-radius:4px;">{}</span>',
+            color,
+            obj.status
+        )
+    
+    status_badge.short_description = "Status"
+    status_badge.admin_order_field = "status"  # Allow sorting
+
 
 # ✅ Autocomplete and search for order_reference when adding SalesOrderLines
 class SalesOrderLinesAdmin(admin.ModelAdmin):
@@ -135,3 +158,5 @@ class SalesOrderLinesAdmin(admin.ModelAdmin):
     search_fields = ["order_reference__order_reference", "order_reference__customer"]
 
 admin.site.register(SalesOrderLines, SalesOrderLinesAdmin)
+
+

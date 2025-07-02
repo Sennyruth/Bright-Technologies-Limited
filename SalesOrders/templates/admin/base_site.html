@@ -1,9 +1,18 @@
 {% extends "admin/base.html" %}
 {% load static %}
 
+{% block extrahead %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static 'admin/css/bright.css' %}">
+{% endblock %}
+
 {% block branding %}
-  <h1 id="site-name">
-    <img src="{% static 'images/logo.png' %}" alt="Logo" style="height:40px; vertical-align: middle;">
-    Bright Technology Limited
-  </h1>
+  <h1 id="site-name">BrightTechnology Limited Admin</h1>
+{% endblock %}
+
+{% block nav-global %}
+  <div style="color: white; padding: 0 20px;">
+    Welcome, {{ request.user.username|title }} |
+    <a href="{% url 'admin:logout' %}" style="color: #fff;">Log out</a>
+  </div>
 {% endblock %}
