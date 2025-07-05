@@ -1,18 +1,32 @@
-{% extends "admin/base.html" %}
-{% load static %}
+{% extends "admin/base.html" %} {% load static %} {% block extrahead %} 
+{{ block.super }}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{% static 'admin/css/bright.css' %}"
+/>
 
-{% block extrahead %}
-  {{ block.super }}
-  <link rel="stylesheet" type="text/css" href="{% static 'admin/css/bright.css' %}">
-{% endblock %}
+<style>
+  .logout-link {
+    background: rgba(255, 0, 0, 0.541);
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font: inherit;
+    font-weight: 20px;
+    color: #fff;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  .logout-link:hover {
+    transform: scale(0.95);
+    transition: 0.5s ease-in-out;
+  }
+</style>
 
-{% block branding %}
-  <h1 id="site-name">BrightTechnology Limited Admin</h1>
-{% endblock %}
-
-{% block nav-global %}
-  <div style="color: white; padding: 0 20px;">
-    Welcome, {{ request.user.username|title }} |
-    <a href="{% url 'admin:logout' %}" style="color: #fff;">Log out</a>
-  </div>
+{% endblock %} {% block branding %}
+<h1 id="site-name">BrightTechnology Limited Admin</h1>
+{% endblock %} {% block nav-global %}
+<div style="color: white; padding: 0 20px">
+  Welcome, {{ request.user.username|title }} 
 {% endblock %}

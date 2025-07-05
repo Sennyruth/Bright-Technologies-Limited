@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Page Not Found - 404</title>
+    <link rel="stylesheet" href="{% static 'admin/css/bright.css' %}">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f3f4f6;
+            text-align: center;
+        }
+        .error-container {
+            max-width: 400px;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 5em;
+            color: #7c3aed;
+        }
+        p {
+            font-size: 1.2em;
+            color: #374151;
+        }
+        a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1>404</h1>
+        <p>Sorry, the page you're looking for doesn't exist.</p>
+        <a href="{% url 'admin:index' %}">← Back to Dashboard</a>
+    </div>
+</body>
+</html>

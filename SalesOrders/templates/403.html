@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Access Denied - 403</title>
+    <link rel="stylesheet" href="{% static 'admin/css/bright.css' %}">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #fffaf0;
+            color: #92400e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+        }
+        .error-box {
+            max-width: 500px;
+        }
+        h1 {
+            font-size: 4em;
+        }
+        p {
+            font-size: 1.2em;
+        }
+        a {
+            color: #b45309;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-box">
+        <h1>403</h1>
+        <p>You don’t have permission to access this page.</p>
+        <p>If you believe this is an error, please contact your system admin.</p>
+        <a href="{% url 'admin:index' %}">← Back to Dashboard</a>
+    </div>
+</body>
+</html>

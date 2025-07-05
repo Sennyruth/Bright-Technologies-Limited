@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Server Error - 500</title>
+    <link rel="stylesheet" href="{% static 'admin/css/bright.css' %}">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #fff7f7;
+            color: #b91c1c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+        }
+        .error-box {
+            max-width: 500px;
+        }
+        h1 {
+            font-size: 4em;
+        }
+        p {
+            font-size: 1.2em;
+            margin: 20px 0;
+        }
+        a {
+            text-decoration: none;
+            color: #dc2626;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-box">
+        <h1>500</h1>
+        <p>Oops! Something went wrong on our end.</p>
+        <p>Our team has been notified. Please try again later.</p>
+        <a href="{% url 'admin:index' %}">← Back to Safety</a>
+    </div>
+</body>
+</html>

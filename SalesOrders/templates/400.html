@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bad Request - 400</title>
+    <link rel="stylesheet" href="{% static 'admin/css/bright.css' %}">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #fef2f2;
+            color: #991b1b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+        }
+        .error-box {
+            max-width: 500px;
+        }
+        h1 {
+            font-size: 4em;
+        }
+        p {
+            font-size: 1.2em;
+        }
+        a {
+            color: #ef4444;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-box">
+        <h1>400</h1>
+        <p>The request was malformed or invalid.</p>
+        <p>Please go back and try again, or contact support.</p>
+        <a href="{% url 'admin:index' %}">← Back to Dashboard</a>
+    </div>
+</body>
+</html>
